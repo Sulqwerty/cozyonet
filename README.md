@@ -2,6 +2,10 @@
 
 Cozy Onet is a relaxed browser-based Onet tile-matching game inspired by the local `Onet.exe` game. Match pairs of icons, clear each board, and work through eight levels with different tile movement patterns.
 
+## Game Screenshot
+
+![Original Cozy Onet game capture showing the tile board and controls](assets/screencapture.png)
+
 ## Getting Started
 
 Open `index.html` in a modern browser and select **Start Level**. The default board is **Very Hard (16 × 9)** on desktop and **Easy (12 × 6)** on mobile. Choose a different board size before starting if you prefer a smaller board.
