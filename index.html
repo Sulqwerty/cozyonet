@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en" data-theme="auto">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f3ec">
+    <title>Cozy Onet</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="game-card" aria-label="Onet tile matching game">
+        <div class="game-toolbar">
+          <div class="toolbar-title">
+            <img class="brand-mark" src="./assets/onet.png" alt="">
+            <div class="toolbar-title-copy">
+              <span class="brand">Cozy Onet</span>
+              <h2 id="board-title">Connect &amp; Relax</h2>
+            </div>
+          </div>
+          <div class="toolbar-controls">
+            <div class="topbar-right">
+              <div class="theme-switch" role="group" aria-label="Color theme">
+                <button type="button" data-theme-option="auto" aria-pressed="true">AUTO</button>
+                <button type="button" data-theme-option="light" aria-pressed="false">LIGHT</button>
+                <button type="button" data-theme-option="dark" aria-pressed="false">DARK</button>
+              </div>
+              <select class="theme-select" id="theme-select" aria-label="Color theme">
+                <option value="auto">AUTO</option>
+                <option value="light">LIGHT</option>
+                <option value="dark">DARK</option>
+              </select>
+              <button class="icon-button sound-button" id="sound-toggle" type="button" aria-label="Turn music on (M)" title="Music is off · M">
+                <span id="sound-icon" aria-hidden="true">♫</span>
+                <kbd>M</kbd>
+              </button>
+              <label class="volume-control">
+                <span aria-hidden="true">♪</span>
+                <input id="music-volume" type="range" min="0" max="100" value="48" aria-label="Background music volume" aria-valuetext="48 percent">
+              </label>
+            </div>
+            <div class="stats" aria-live="polite">
+              <div class="stat"><span class="eyebrow">PAIRS</span><strong id="pairs-count">—</strong></div>
+              <div class="stat"><span class="eyebrow">TIME</span><strong id="timer">00:00</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="level-picker">
+          <div class="level-picker-options">
+            <div class="level-picker-heading"><span class="eyebrow">CHOOSE YOUR LEVEL</span></div>
+            <label class="board-size-picker" for="board-size">
+              <span class="eyebrow">BOARD SIZE</span>
+              <select id="board-size" aria-label="Choose board size">
+                <option value="very-easy">VERY EASY · 8 × 6</option>
+                <option value="easy">EASY · 12 × 6</option>
+                <option value="medium">MEDIUM · 12 × 8</option>
+                <option value="hard">HARD · 15 × 8</option>
+                <option value="very-hard" selected>VERY HARD · 16 × 9</option>
+              </select>
+            </label>
+          </div>
+          <div class="level-buttons" id="level-buttons" role="group" aria-label="Choose game level">
+            <button class="level-button active" type="button" data-level="1" aria-pressed="true">1</button>
+            <button class="level-button" type="button" data-level="2" aria-pressed="false">2</button>
+            <button class="level-button" type="button" data-level="3" aria-pressed="false">3</button>
+            <button class="level-button" type="button" data-level="4" aria-pressed="false">4</button>
+            <button class="level-button" type="button" data-level="5" aria-pressed="false">5</button>
+            <button class="level-button" type="button" data-level="6" aria-pressed="false">6</button>
+            <button class="level-button" type="button" data-level="7" aria-pressed="false">7</button>
+            <button class="level-button" type="button" data-level="8" aria-pressed="false">8</button>
+          </div>
+        </div>
+
+        <div class="board-wrap">
+          <div class="board-placeholder" id="placeholder">
+            <img class="placeholder-splash" src="assets/splash.jpg" alt="Cozy Onet — Connect & Relax">
+          </div>
+          <div class="board" id="board" role="grid" aria-label="Tile board" hidden></div>
+          <svg class="path-layer" id="path-layer" aria-hidden="true" hidden></svg>
+          <div class="result-toast" id="result-toast" role="status" aria-live="polite"></div>
+          <div class="level-celebration" id="level-celebration" aria-live="polite" hidden>
+            <div class="celebration-confetti" id="celebration-confetti" aria-hidden="true"></div>
+            <div class="celebration-card">
+              <span class="celebration-star" aria-hidden="true">✦</span>
+              <strong class="celebration-title" id="celebration-title">Level complete!</strong>
+              <div class="celebration-results">
+                <div class="celebration-result score-result"><span>FINAL SCORE</span><strong id="final-score">0</strong></div>
+                <div class="celebration-result time-result"><span>TIME FINISHED</span><strong id="finish-time">00:00</strong></div>
+              </div>
+              <span id="celebration-detail" class="celebration-detail"></span>
+              <form class="leaderboard-entry" id="leaderboard-entry" hidden>
+                <label for="player-name">Enter your name for the leaderboard</label>
+                <div class="leaderboard-entry-controls">
+                  <input id="player-name" name="playerName" type="text" maxlength="24" autocomplete="nickname" placeholder="Your name" required>
+                  <button class="primary-button" type="submit">Save score</button>
+                </div>
+                <span class="leaderboard-note">Only players who complete all 8 levels in order can submit a score.</span>
+              </form>
+              <span id="leaderboard-entry-status" class="celebration-detail" aria-live="polite"></span>
+              <button class="primary-button next-level-button" id="next-level-button" type="button" hidden>Next level <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="board-appearance">
+          <div class="board-atmosphere">
+            <button class="rain-toggle" id="rain-toggle" type="button" aria-label="Enable ambience sound" aria-pressed="false">
+              <span aria-hidden="true">☔</span><span id="rain-toggle-label">AMBIENCE SOUND: OFF</span>
+            </button>
+            <label class="rain-volume-control" for="rain-volume">
+              <span class="eyebrow">AMBIENCE VOLUME</span>
+              <input id="rain-volume" type="range" min="0" max="100" value="35" aria-label="Ambience sound volume" aria-valuetext="35 percent">
+            </label>
+          </div>
+          <label class="board-darkness-control" for="board-darkness">
+            <span class="eyebrow">BOARD DARKNESS</span>
+            <input id="board-darkness" type="range" min="0" max="70" step="5" value="20" aria-label="Board background darkness" aria-valuetext="20 percent">
+            <output id="board-darkness-value" for="board-darkness">20%</output>
+          </label>
+          <label class="board-tile-style" for="board-tile-style">
+            <span class="eyebrow">TILE STYLE</span>
+            <select id="board-tile-style" aria-label="Choose tile board style">
+              <option value="theme-color">THEME COLOR</option>
+              <option value="autocolor">AUTO COLOR</option>
+              <option value="transparent">TRANSPARENT</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="game-footer">
+          <div class="footer-note">
+            <button class="text-button about-button" id="about-button" type="button"><span aria-hidden="true">ⓘ</span> ABOUT</button>
+            <button class="text-button leaderboard-button" id="leaderboard-button" type="button"><span aria-hidden="true">🏆</span> LEADERBOARD</button>
+            <span class="footer-note-icon" aria-hidden="true">✧</span><span id="message">Find two of a kind. Clear the board at your own pace.</span>
+          </div>
+          <div class="actions">
+            <button class="text-button" id="hint-button" type="button" disabled><span aria-hidden="true">✦</span> Hint <kbd>H</kbd></button>
+            <button class="text-button" id="shuffle-button" type="button" disabled><span aria-hidden="true">⤨</span> Shuffle <kbd>S</kbd></button>
+            <button class="primary-button" id="start-button" type="button"><span aria-hidden="true">▶</span> Start a game</button>
+          </div>
+        </div>
+      </section>
+
+      <dialog class="about-dialog" id="about-dialog" aria-labelledby="about-title">
+        <div class="about-header">
+          <img class="about-logo" src="./assets/onet.png" alt="">
+          <div><span class="eyebrow">GAME GUIDE</span><h2 id="about-title">ABOUT COZY ONET</h2></div>
+          <button class="about-close" id="about-close" type="button" aria-label="Close About dialog">×</button>
+        </div>
+        <p class="about-intro">Cozy Onet is a relaxed tile-matching game where you clear colorful pairs by connecting identical icons with a short, unobstructed path.</p>
+        <section class="about-section">
+          <h3>How to Play</h3>
+          <ol>
+            <li>Choose one of the eight board movement levels and start a game.</li>
+            <li>Choose a board size for a shorter or longer round. The size locks when you continue with Next Level.</li>
+            <li>In portrait orientation, each board size swaps its columns and rows automatically.</li>
+            <li>Select two matching icons. Their path may make up to two right-angle turns and can travel around the board edge.</li>
+            <li>Use Hint to reveal a possible pair, or Shuffle to change the icons in place when you need a fresh layout.</li>
+            <li>Clear every pair to finish the level. Music starts with the game and can be adjusted or muted at any time.</li>
+          </ol>
+        </section>
+        <div class="about-columns">
+          <section class="about-section">
+            <h3>Scoring</h3>
+            <ul>
+              <li>Unassisted match: <strong>+20</strong></li>
+              <li>Manual or automatic shuffle: <strong>−10</strong></li>
+              <li>Per-level time bonus depends on board size: <strong>Very Easy +4,000</strong>, <strong>Easy +5,500</strong>, <strong>Medium +7,000</strong>, <strong>Hard +8,500</strong>, and <strong>Very Hard +10,000</strong>, minus <strong>10 per second</strong>.</li>
+              <li>Level completion bonus depends on board size: <strong>Very Easy +200</strong>, <strong>Easy +400</strong>, <strong>Medium +600</strong>, <strong>Hard +800</strong>, and <strong>Very Hard +1,000</strong>.</li>
+              <li>A pair shown by Hint does not earn match points.</li>
+              <li>Your final score carries into the next level only when you use the Next Level button. Replaying a level resets its score to that level's starting score.</li>
+              <li>Leaderboard scores are available only after completing levels 1–8 in order using Next Level; the board size is recorded too.</li>
+            </ul>
+            <p class="about-formula">Each level adds its board-size time bonus, match points, shuffle penalties, and board-size completion bonus to the carried score.</p>
+          </section>
+          <section class="about-section">
+            <h3>Shortcuts</h3>
+            <ul class="shortcut-list">
+              <li><kbd>H</kbd><span>Show a hint</span></li>
+              <li><kbd>S</kbd><span>Shuffle the board</span></li>
+              <li><kbd>M</kbd><span>Toggle background music</span></li>
+              <li><kbd>Esc</kbd><span>Close this window</span></li>
+            </ul>
+          </section>
+        </div>
+      </dialog>
+
+      <dialog class="about-dialog leaderboard-dialog" id="leaderboard-dialog" aria-labelledby="leaderboard-title">
+        <div class="about-header">
+          <div class="leaderboard-logo" aria-hidden="true">🏆</div>
+          <div><span class="eyebrow">TOP RUNS</span><h2 id="leaderboard-title">COZY ONET LEADERBOARD</h2></div>
+          <button class="about-close" id="leaderboard-close" type="button" aria-label="Close leaderboard">×</button>
+        </div>
+        <p class="about-intro">Scores are saved in this browser. Only players who complete all 8 levels in order can appear here.</p>
+        <div class="leaderboard-columns" aria-hidden="true"><span>No.</span><span>Name</span><span>Score</span><span>Time Finished</span><span>Board (C×R)</span></div>
+        <p class="leaderboard-empty" id="leaderboard-empty">No completed campaigns yet. Finish all 8 levels to claim the first spot!</p>
+        <ol class="leaderboard-list" id="leaderboard-list" aria-label="Leaderboard scores"></ol>
+      </dialog>
+
+    </main>
+    <script src="game.js"></script>
+  </body>
+</html>
