@@ -8,7 +8,7 @@ Cozy Onet is a relaxed browser-based Onet tile-matching game inspired by the loc
 
 ## Getting Started
 
-Open `index.html` in a modern browser and select **Start Level**. The default board is **Very Hard (16 × 9)** on desktop and **Easy (12 × 6)** on mobile. Choose a different board size before starting if you prefer a smaller board.
+Play online at [sulqwerty.github.io/cozyonet](https://sulqwerty.github.io/cozyonet), or open `index.html` in a modern browser. Select **Start Level** to begin. The default board is **Very Hard (16 × 9)** on desktop and **Easy (12 × 6)** on mobile. Choose a different board size before starting if you prefer a smaller board.
 
 ## How to Play
 
